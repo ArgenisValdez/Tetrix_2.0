@@ -1,3 +1,51 @@
+function login() {
+    let miUsuario = document.getElementById("txtUsuario").value;
+    let miPass = document.getElementById("txtPass").value; 
+
+    var usuarioregex = /^[a-zA-Z0-9]+$/;
+    var passregex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
+    if(miUsuario.match(usuarioregex) && miPass.match(passregex)) {
+        try {
+            fetch("http://localhost:3000/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    usuario: miUsuario,
+                    pass: miPass
+                })
+            })
+            .then(respuesta => respuesta.json())
+            .then(data => {
+                if (data.existe === 1){
+                    window.location.href = "juego.html"; 
+                }else{
+                console.log("Login incorrecto");
+                }
+            })
+            .catch(error => { throw new Error("Error en la petición: " +        error.message); });
+            }catch (error) {
+            console.error(error);
+            }
+    }else{
+        alert("El nombre de usuario o la contraseña no cumplen con los requisitos de seguridad.");
+    }
+}
+
+limitarCaracteres(document.getElementById("txtUsuario"), 20);
+limitarCaracteres(document.getElementById("txtPass"), 20);
+
+function limitarCaracteres(input, maxLength){
+    input.addEventListener('input', function() {
+        if(input.value.length > maxLength){
+            input.value = input.value.slice(0, maxLength);
+        }
+    })
+}
+
+
 function juego(){
 const canvas = document.getElementById('Tetrix');
 const context = canvas.getContext('2d');
