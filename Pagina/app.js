@@ -1,3 +1,4 @@
+//Funcion Encargada del logueo a la pagina
 function login() {
     let miUsuario = document.getElementById("txtUsuario").value;
     let miPass = document.getElementById("txtPass").value; 
@@ -45,7 +46,42 @@ function limitarCaracteres(input, maxLength){
     })
 }
 
+//Funcion encargada de crear un nuevo usuario
+function crear() {
+    let miUsuario = document.getElementById("txtUsuario").value;
+    let miClave = document.getElementById("txtPass").value; 
 
+    var usuarioregex = /^[a-zA-Z0-9]+$/;
+    var passregex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
+    if(miUsuario.match(usuarioregex) && miClave.match(passregex)) {
+        try {
+            fetch('http://localhost:3000/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    usuario: miUsuario,
+                    clave: miClave
+                })
+            })
+            .then(respuesta => respuesta.text())
+            .then(data => {
+                alert(data);
+            })
+            .catch(error => { throw new Error("Error en la solicitud: " + error) });
+
+        } catch(error) {
+            console.error(error);
+        }
+    } else {
+        alert("El nombre de usuario o la contraseña no cumplen con los requisitos de seguridad.");
+    }
+}
+
+
+//Funcion encargada de todo lo referente al juego
 function juego(){
 const canvas = document.getElementById('Tetrix');
 const context = canvas.getContext('2d');
