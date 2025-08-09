@@ -83,6 +83,7 @@ function crear() {
 
 //Funcion encargada de todo lo referente al juego
 function juego(){
+    
 const canvas = document.getElementById('Tetrix');
 const context = canvas.getContext('2d');
 const ROWS = 20;
